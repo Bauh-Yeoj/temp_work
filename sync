@@ -1,7 +1,7 @@
 #!/bin/bash
 
-MANIFEST=git://github.com/crdroidandroid/android.git
-BRANCH=11.0
+MANIFEST=https://github.com/StyxProject/manifest
+BRANCH=R
 
 mkdir -p /tmp/rom
 cd /tmp/rom
@@ -15,12 +15,13 @@ git config --global user.email vixanonew@gmail.com
 repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all) || repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j8
 
 # Sync stuffs
-find hardware/qcom-caf/msm8998/display hardware/qcom-caf/msm8998/audio hardware/qcom-caf/msm8998/media .repo/ -delete
-git clone https://github.com/LineageOS/android_hardware_qcom_display --single-branch -b lineage-18.1-caf-msm8998 hardware/qcom-caf/msm8998/display --depth=1
-git clone https://github.com/LineageOS/android_hardware_qcom_audio --single-branch -b lineage-18.1-caf-msm8998 hardware/qcom-caf/msm8998/audio --depth=1
-git clone https://github.com/LineageOS/android_hardware_qcom_media --single-branch -b lineage-18.1-caf-msm8998 hardware/qcom-caf/msm8998/media --depth=1
+find vendor/codeaurora/telephony/ hardware/qcom-caf/msm8996/display hardware/qcom-caf/msm8996/audio hardware/qcom-caf/msm8996/media .repo/ -delete
 
-git clone https://github.com/ItsVixano/android_device_xiaomi_whyred --single-branch -b eleven device/xiaomi/whyred --depth=1
-git clone https://github.com/ItsVixano/android_vendor_xiaomi_whyred --single-branch -b eleven vendor/xiaomi/whyred --depth=1
-git clone https://github.com/SreekanthPalakurthi/kranul --single-branch -b eas kernel/xiaomi/whyred --depth=1
+git clone https://github.com/wave-project/vendor_codeaurora_telephony --depth=1 --single-branch vendor/codeaurora/telephony/
+git clone https://github.com/Jabiyeff/android_hardware_qcom_media --depth=1 --single-branch hardware/qcom-caf/msm8996/media
+git clone https://github.com/Jabiyeff/android_hardware_qcom_display --depth=1 --single-branch hardware/qcom-caf/msm8996/display
+git clone https://github.com/LineageOS/android_hardware_qcom_audio --depth=1 --single-branch -b lineage-18.1-caf-msm8996 hardware/qcom-caf/msm8996/audio
 
+git clone https://github.com/StyxProject-Devices/device_xiaomi_ysl --depth=1 --single-branch -b R device/xiaomi/ysl
+git clone https://github.com/StyxProject-Devices/vendor_xiaomi_ysl --depth=1 --single-branch -b R vendor/xiaomi/ysl
+git clone https://github.com/StyxProject-Devices/kernel_xiaomi_ysl --depth=1 --single-branch -b R kernel/xiaomi/ysl
