@@ -1,0 +1,48 @@
+#!/bin/bash
+
+cd /tmp/rom # Depends on where source got synced
+rm -rf .repo & # lets remove unnecessary things, so that no storage issue can occur
+
+# Normal build steps
+. build/envsetup.sh
+lunch lineage_whyred-userdebug
+export SELINUX_IGNORE_NEVERALLOWS=true
+export CCACHE_DIR=/tmp/ccache
+export CCACHE_EXEC=$(which ccache)
+export USE_CCACHE=1
+ccache -M 20G
+ccache -o compression=true
+ccache -z
+
+# Telgram env setup
+export BOT_MSG_URL="https://api.telegram.org/bot$API_BOT/sendMessage"
+export BOT_BUILD_URL="https://api.telegram.org/bot$API_BOT/sendDocument"
+
+tg_post_msg() {
+        curl -s -X POST "$BOT_MSG_URL" -d chat_id="$2" \
+        -d "parse_mode=html" \
+        -d text="$1"
+}
+
+# stuffs
+up(){
+	curl --upload-file $1 https://transfer.sh/
+}
+
+make_metalava(){
+	mka api-stubs-docs
+	mka system-api-stubs-docs
+	mka test-api-stubs-docs
+}
+
+make_rom(){
+	tg_post_msg "<b>Crdroidandroid CI Build Triggered for whyred</b>" "$CHATID"
+	mka bacon -j12
+	zip=$(up out/target/product/whyred/*zip)
+	echo " "
+	echo "$zip"
+	tg_post_msg "<b>Build Completed</b>%0A%0A<b>Link : </b> <code>"$zip"</code>" "$CHATID"
+}
+
+make_metalava
+make_rom

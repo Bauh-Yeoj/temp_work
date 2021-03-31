@@ -1,0 +1,22 @@
+env: # Environt variable to pass to all tasks
+    CIRRUS_CLONE_DEPTH: 1 # No need to clone with whole history
+    CIRRUS_WORKING_DIR: "/tmp/ci" # Where to clone repo
+    rclone_config: "ENCRYPTED[b52e5b0d72a6bd4c4de1789e3c16dc3f7eb87314ea64ed755943e095df637f32f913bc08c9c549756e3151b5190503b6]"
+    CHATID: "ENCRYPTED[dabb2ffa7cf9b41df300c9471dce87ab2914aac611aaec48ec258c46740a7d1a08b038c4faf639351853c69dc1e16e46]"
+    API_BOT: "ENCRYPTED[017c03bb6f2f20e16072575c3e4786abc2882c527b489559ee528f1e305db3f83818786284fe80097fdb87712ff77b5f]"
+
+task:
+    name: ItsVixano
+    timeout_in: 120m
+    container:
+      image: fr3akyphantom/droid-builder:latest
+      cpu: 14
+      memory: 24G
+    download_ccache_background_script:
+      - ./download_ccache
+    sync_script:
+      - ./sync
+    build_script:
+      - ./build
+    upload_ccache_script:
+      - ./upload_ccache
