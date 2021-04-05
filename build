@@ -24,9 +24,7 @@ tg_post_msg() {
 
 # stuffs
 up(){
-	mkdir -p ~/.config/rclone
-	echo "$rclone_config" > ~/.config/rclone/rclone.conf
-	time rclone copy $1 gdrive:ccache/ci2/roms/whyred -P
+	curl --upload-file $1 https://transfer.sh/
 }
 
 make_metalava(){
@@ -36,10 +34,9 @@ make_metalava(){
 }
 
 make_rom(){
-	tg_post_msg "<b>Crdroidandroid CI Build Triggered for whyred</b>" "$CHATID"
-	mka bacon -j8
-	up out/target/product/whyred/*zip && cd out/target/product/whyred/
-        zip=$(cat *zip)
+	tg_post_msg "<b>Crdroid CI Build Triggered for whyred</b>" "$CHATID"
+	mka bacon -j10
+	zip=$(up out/target/product/whyred/*zip)
 	echo " "
 	tg_post_msg "<b>Build Completed</b>%0A%0A<b>Zip name : </b> <code>"$zip"</code>%0A<b>Link : </b> <code>"https://server.nippon.workers.dev/ccache/ci2/roms/whyred/"$zip""</code>" "$CHATID"
 }
